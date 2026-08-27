@@ -1,0 +1,10 @@
+{
+  "slug": "caption-confidence",
+  "title": "Caption Confidence",
+  "territory": "utilities",
+  "user": "People with high-frequency hearing loss who use captions and need uncertain words made easy to catch without replaying every line.",
+  "smallest_useful_product": "Local web app/extension that imports VTT/SRT or reads an exposed HTML5 track, highlights user-defined sound-confusion pairs and low-confidence timing gaps, and offers one-key replay.",
+  "artifact_class": "browser-extension",
+  "monetization": "one-time",
+  "constraints": "Only operate on captions the user can access; never claim to diagnose hearing loss; captions/transcripts remain local."
+}
