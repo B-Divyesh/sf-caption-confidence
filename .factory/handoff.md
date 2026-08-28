@@ -1,17 +1,14 @@
-# Caption Confidence repair handoff
+# Caption Confidence independent verification handoff
 
-## Release disposition
+## Release disposition: FAIL
 
-The four findings in the independent report have been repaired while preserving the MV3 extension and static-site deployment class.
+Candidate `038f0ab44da48e097bd0b65dd723f057bbd27b01` was independently tested from a clean checkout on 2026-08-28 UTC against <https://caption-confidence.sociobot.in/>. Product code was not changed. Full evidence is in [verification-2.md](verification-2.md).
 
-- **P1 download:** `npm run build:site` now builds the extension before the static site and then packages it. The declared deploy root, `dist/site`, always contains `downloads/caption-confidence-chrome.zip` rather than relying on a later, optional step.
-- **P1 service worker:** the worker now lives in `public/sw.js`, so Vite emits `/sw.js` in the deploy root. It claims clients after install, versions its cache as `caption-confidence-v2`, and the browser regression verifies a controlled offline reload.
-- **P2 active cue:** a `CC_SETTINGS` message forces the current cue to render even when playback has not changed cues. The regression checks immediate pair markup, size, tight-timing label, appearance class, and overlay-visibility updates.
-- **P3 response policy:** `staticwebapp.config.json` now emits a self-hosted CSP with explicit Sociobot license verification allow-lists, `frame-ancestors 'none'`, and `X-Frame-Options: DENY`.
+The core extension, production build, live download, service worker/offline flow, privacy behavior, deployment identity, accessibility automation, and performance budgets pass. The previous verification's four defects are repaired.
 
-## Build and verification
+Release remains blocked because the live **Support & unlock** action returns HTTP 404 from the required Sociobot checkout endpoint. Additional findings are sub-44 px mobile/popup hit targets, horizontal overflow at the 320 px/200%-zoom reflow boundary, 11 known development-tool advisories, and loss of the explicit invalid-license notice after a cached website reload.
 
-Run from a clean checkout:
+## Commands run
 
 ```bash
 npm ci
@@ -19,28 +16,16 @@ npm run check
 npm test
 npm run build
 npm run test:e2e
+npm audit --omit=dev
+npm audit
 ```
 
-Verified 2026-08-28 UTC:
+Results: TypeScript passed; 8/8 unit tests passed; 6/6 Playwright tests passed; the exact production build passed; production audit found 0 vulnerabilities. Lighthouse 13.4.1 mobile on the live URL scored 100/100/100/100 with LCP 1,068 ms, TBT 31.5 ms, CLS 0, and 46,986 B transferred.
 
-- `npm ci` completed; it reports 11 advisories in the development dependency tree. `npm audit --omit=dev` reports **0 vulnerabilities**.
-- `npm run check` passed.
-- `npm test` passed: **8/8** unit tests.
-- `npm run build` passed. `dist/site/sw.js` is emitted (925 B), and `dist/site/downloads/caption-confidence-chrome.zip` is emitted (16,212 B). The extension output is **32.75 KB**; initial site JS is **3.09 KB**, CSS **12.55 KB**, mobile hero **37.24 KB**, and desktop hero **126.30 KB**.
-- ZIP consumer check passed: `unzip -t` reports no errors; the package root contains the expected `manifest.json` with `manifest_version: 3` and `name: Caption Confidence`.
-- `npm run test:e2e` passed: **6/6**. It exercises the unpacked extension against a real HTML5 `TextTrack`, active-cue setting refreshes, replay, desktop and 390×844 mobile rendering, keyboard skip-link focus, reduced motion, zero serious/critical axe issues, no page errors, no third-party page requests, site ZIP response, service-worker control/offline reload, and the emitted CSP/framing policy.
-- Local Lighthouse 12.8.2 against the production preview: **Performance 100, Accessibility 100, Best Practices 100, SEO 100**; LCP **1.2 s**, TBT **0 ms**, CLS **0**.
+## Required next steps
 
-## Deployment
-
-Deployed to <https://caption-confidence.sociobot.in/> on 2026-08-28 UTC with the factory static deployment configuration (`dist/site`). The Azure deployment completed successfully as deployment ID `841d784d-e9fb-4150-b56d-abf0651b9251`.
-
-- Live `index.html`, `/downloads/caption-confidence-chrome.zip`, and `/sw.js` SHA-256-match their respective `dist/site` files.
-- The live ZIP is **200**, `application/zip`, 16,212 B, and begins with valid `PK\003\004` ZIP magic. The live worker is **200**, `text/javascript`, 925 B.
-- The live response sends the configured CSP with `frame-ancestors 'none'`, `X-Frame-Options: DENY`, plus the existing nosniff, referrer, and permissions policies.
-- Fresh Chromium desktop (1440×900) and mobile (390×844) checks both reached a controlling service worker, completed an offline reload, and emitted no console or page errors.
-
-## Known boundaries
-
-- The extension only uses caption tracks the page exposes; DRM/protected tracks remain unsupported by design. Imported cues are tab-memory only, while preferences remain local.
-- The optional supporter license path is unchanged. Its only outbound API request remains an explicit user-license verification to Sociobot; caption content is never sent.
+1. Enable/register the live `caption-confidence` Sociobot billing product and verify the hosted checkout redirect.
+2. Make all site and popup interactive hit areas at least 44×44 px and remove the 320 px reflow overflow.
+3. Upgrade Vite, Vitest, WXT/transitives until `npm audit` is clean or document accepted dev-only risk.
+4. Keep the inactive-license warning visible when a cached invalid token exists.
+5. Rerun the focused checks described in `.factory/verification-2.md`.
