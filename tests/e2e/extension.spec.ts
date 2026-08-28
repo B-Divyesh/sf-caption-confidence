@@ -29,6 +29,18 @@ test('extension reads a page track, highlights a pair, and replays with R', asyn
 
     const popup = await context.newPage();
     await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+    const undersizedControls = await popup.locator('a, button, input:not([type="file"]), select, textarea').evaluateAll((elements) => elements
+      .filter((element) => {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+      })
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return { id: element.id, text: element.textContent?.trim(), width: rect.width, height: rect.height };
+      })
+      .filter(({ width, height }) => width < 44 || height < 44));
+    expect(undersizedControls).toEqual([]);
     await page.bringToFront();
     await popup.locator('#use-track').evaluate((button: HTMLButtonElement) => {
       button.disabled = false;

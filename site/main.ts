@@ -4,6 +4,7 @@ const API_BASE = location.hostname === 'localhost' || location.hostname === '127
   ? 'https://pilot-api.sociobot.in/api/v1'
   : 'https://api.sociobot.in/api/v1';
 const DAY = 86_400_000;
+const INACTIVE_LICENSE_NOTICE = 'License no longer active. Check the token or purchase a new license.';
 
 interface Verdict { valid: boolean; checkedAt: number; reason?: string }
 
@@ -27,7 +28,7 @@ function renderLicense(valid: boolean, note?: string): void {
 async function verifyLicense(token: string, force = false): Promise<boolean> {
   const cached = readVerdict();
   if (!force && cached && Date.now() - cached.checkedAt < DAY) {
-    renderLicense(cached.valid);
+    renderLicense(cached.valid, cached.valid ? undefined : INACTIVE_LICENSE_NOTICE);
     return cached.valid;
   }
   if (!navigator.onLine) {
@@ -42,7 +43,7 @@ async function verifyLicense(token: string, force = false): Promise<boolean> {
     const result = await response.json() as { valid: boolean; reason?: string };
     const verdict = { valid: result.valid, reason: result.reason, checkedAt: Date.now() };
     localStorage.setItem(VERDICT_KEY, JSON.stringify(verdict));
-    renderLicense(result.valid, result.valid ? undefined : 'License no longer active. Check the token or purchase a new license.');
+    renderLicense(result.valid, result.valid ? undefined : INACTIVE_LICENSE_NOTICE);
     return result.valid;
   } catch {
     renderLicense(Boolean(cached?.valid), cached?.valid ? 'Using the last valid license check while verification is unavailable.' : 'Could not verify right now. The free extension is still available.');
@@ -58,6 +59,7 @@ if (returnedLicense) {
 const savedLicense = returnedLicense ?? localStorage.getItem(LICENSE_KEY);
 const cached = readVerdict();
 if (cached?.valid) renderLicense(true, 'Supporter access restored from this device. Rechecking quietly…');
+if (savedLicense && cached && !cached.valid) renderLicense(false, INACTIVE_LICENSE_NOTICE);
 if (savedLicense) void verifyLicense(savedLicense, Boolean(returnedLicense));
 
 restoreForm?.addEventListener('submit', (event) => {

@@ -38,6 +38,7 @@ npm run dev:site
 ## Test and build
 
 ```bash
+npm run lint
 npm run check
 npm test
 npm run build
