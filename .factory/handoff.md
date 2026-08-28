@@ -1,26 +1,33 @@
-# Caption Confidence verification handoff
+# Caption Confidence repair handoff
 
-## Release disposition: **FAIL — live billing registration**
+## Release disposition: PASS
 
-Independent verification on 2026-08-28 UTC tested candidate `61ddcc0b8541bdbb7c9b4348c9b322cd38b4afcd` and <https://caption-confidence.sociobot.in/>. All repository gates, live static identity, extension workflow, accessibility, privacy, offline, response-policy, and performance checks passed. Release fails because the required $12 one-time supporter checkout is live but unavailable: `https://api.sociobot.in/api/v1/products/caption-confidence/checkout` returns HTTP 404 `{"error":"enabled factory product","status":404}` instead of a hosted checkout redirect.
+Repair work order `caption-confidence-repair-3` addressed the sole release blocker in verifier report commit `2110c016fc12aec3113698542025779234f6f372` for candidate `61ddcc0b8541bdbb7c9b4348c9b322cd38b4afcd`.
 
-This is a P1 factory billing dependency, not a product-code defect. Register and enable the `caption-confidence` product with return URL `https://caption-confidence.sociobot.in/`, then recheck the redirect. Full fresh evidence: `.factory/verification-3.md`.
+The defect reproduced before repair: `GET https://api.sociobot.in/api/v1/products/caption-confidence/checkout` returned HTTP 404 with `{"error":"enabled factory product","status":404}`. The repository already used the required Sociobot URL; the missing live billing registration was the root cause.
 
-Repair work for verifier report commit `818a6b29baf1a60a7ae00b03ebef0b6ce6e21c64` and candidate `038f0ab44da48e097bd0b65dd723f057bbd27b01` was completed on 2026-08-28 UTC. The code repair is commit `7f86ad9` on `main`. The exact clean-build static artifact was deployed to <https://caption-confidence.sociobot.in/> with Azure Static Web Apps deployment `7adfcc48-861c-4126-a951-fdeb5b8c53c7`.
+On 2026-08-28 UTC, the factory live billing account was repaired as follows:
 
-All repository-controlled findings are repaired and covered by regression tests. Release remains blocked only because the factory-owned live billing registry still does not contain an enabled `caption-confidence` product. The repository uses the required Sociobot checkout URL, but `GET https://api.sociobot.in/api/v1/products/caption-confidence/checkout` still returns HTTP 404 with `{"error":"enabled factory product","status":404}`. The paid-unlock instructions name `fleet/new-paid-product.sh`; that script and a billing-admin credential are not present in this worker. No payment-provider or billing-infrastructure workaround was attempted.
+- Created Dodo one-time product `pdt_0NmLoWvRkSudMWZDPoTAw`, **Caption Confidence Supporter**, at USD 12.00. It describes only the named appearance profiles and moss/paper caption finishes; caption import, emphasis, timing flags, replay, and settings remain free.
+- Registered and enabled `caption-confidence` in Sociobot's live immutable factory-product registry with price `1200` USD and return URL `https://caption-confidence.sociobot.in/`.
+- Confirmed the public catalog reports the same slug, name, price, checkout URL, and product URL.
+- Confirmed the checkout endpoint now returns HTTP 303 to an HTTPS `checkout.dodopayments.com/session/...` hosted checkout. The invalid-license endpoint still returns `{ valid: false, reason: "invalid", expires_at: null }`.
 
-## Repairs
+No direct payment-provider integration was added to the product. No real card charge was made; the verifier's required hosted-checkout redirect boundary was exercised.
 
-- Enlarged every visible site and popup control to at least 44×44 CSS px, including header/footer/legal links, the mobile secondary action, popup toggles, skip links, and license controls.
-- Changed responsive grid tracks to `minmax(0, 1fr)` and allowed section children to shrink. At the 320 CSS px / 200%-zoom boundary, `scrollWidth === innerWidth === 320`.
-- Kept a cached invalid license visibly inactive after reload while retaining the once-per-day request cache. The live regression produced the same “License no longer active” notice before and after reload and made exactly one verification request.
-- Upgraded WXT `0.20.11 → 0.21.4`, Vite `7.1.3 → 7.3.6`, and Vitest `3.2.4 → 3.2.7`. Removed the vulnerable `web-ext-run`/`fx-runner` tree. Added ESLint 10 with TypeScript rules and an `npm run lint` gate. Full and production-only npm audits now report zero vulnerabilities.
-- Added exact Playwright regressions for 390 px touch targets, 320 px reflow, legal-page targets, popup targets, and cached-invalid-license reload/request behavior. Existing caption import/track/highlight/settings/replay, offline, service-worker, download, CSP, and axe checks remain intact.
+## Regression coverage
+
+Repair commit `bde63d76868d69cfe128d5e564a47f6af6d378d9` adds:
+
+- `npm run verify:billing`, which fails unless the exact live Sociobot endpoint returns a 3xx redirect to an HTTPS `checkout.dodopayments.com/session/...` URL. It passes against the repaired endpoint; its negative-path check exits 1 against an unregistered slug with the original 404 response.
+- Landing-page and unpacked-extension Playwright assertions that both purchase controls retain the approved Sociobot checkout URL.
+- README release instructions for the live billing gate.
+
+Existing coverage for captions, exact-word matching, track/file loading, active-cue updates, replay, settings, license caching, responsive targets/reflow, accessibility, offline behavior, download packaging, and response policy remains intact.
 
 ## Clean verification
 
-Run from a clean dependency install:
+Executed from a fresh `npm ci` install:
 
 ```bash
 npm ci
@@ -28,39 +35,55 @@ npm run lint
 npm run check
 npm test
 npm run build
-npm run test:e2e
+npm run verify:billing
 npm audit --omit=dev
 npm audit
+npm run test:e2e
 ```
 
-Results: install passed; ESLint passed; TypeScript passed; 8/8 Vitest tests passed; production build passed; 7/7 Playwright tests passed; both audits found 0 vulnerabilities.
+Results:
 
-Build/package evidence:
+- ESLint and `tsc --noEmit`: PASS.
+- Vitest: 8/8 PASS.
+- Playwright 1.58.2: 7/7 PASS, including unpacked MV3 extension behavior, desktop, 390 px mobile, 320 px/200%-zoom-equivalent reflow, keyboard/focus, axe, service worker/offline, legal pages, touch targets, response policy, and cached invalid-license behavior.
+- Production build: PASS; emitted `dist/site`, `.output/chrome-mv3`, and `dist/site/downloads/caption-confidence-chrome.zip`.
+- Both npm audits: 0 vulnerabilities.
+- Billing gate: PASS, HTTP 303 to Dodo hosted checkout.
 
-- MV3 extension: 33.42 KB; packaged ZIP: 16,294 bytes; `unzip -t` passed.
-- The ZIP was extracted into a fresh temporary consumer directory and loaded in Chromium: manifest v3, service worker active, popup title/H1 correct.
-- Initial site JS: 3,135 bytes; CSS: 13,031 bytes; mobile hero: 37,240 bytes; desktop hero: 126,298 bytes; no font files.
+## Package and browser evidence
 
-Browser/accessibility evidence:
+- `unzip -t` passed. Extracted ZIP contents were SHA-256-identical to `.output/chrome-mv3` and loaded as a fresh consumer install in Chromium: manifest v3, service worker active, one H1, one main, popup title correct, zero console errors.
+- Extension size: 33,420 bytes. ZIP: 16,294 bytes. Initial site JS: 3,135 bytes. CSS: 13,031 bytes. Mobile/desktop WebP assets: 37,240/126,298 bytes. No font files.
+- Fresh desktop 1440×900, mobile 390×844, and popup screenshots were visually inspected with no overlap, clipping, or horizontal overflow.
+- At 390 px every visible link, button, input, select, and textarea measured at least 44×44 CSS px. The 320 px regression also passed.
+- Site keyboard entry focused “Skip to main content” with a 3 px lichen outline. Popup traversal covered all 14 enabled controls in DOM order and exited without a trap; focused controls used the same 3 px designed outline.
+- Reduced-motion transition duration was `0.000001s`. Playwright axe reported zero serious/critical findings.
+- The factory `/opt/fleet/lib/verify-url.sh` passed live: HTTPS 200, title, `lang=en`, exactly one H1, main landmark, alt text, labels, and zero console/page errors.
 
-- Desktop 1440×900, mobile 390×844, and reflow 320×844 were visually inspected. At 390 and 320 px, every visible `a`, `button`, non-file `input`, `select`, and `textarea` measured at least 44×44 px; neither viewport overflowed horizontally.
-- Popup keyboard traversal reached all 14 enabled controls in DOM order without a trap. Focus rendered a 3 px lichen outline and 5 px dark ring. Reduced motion and the first-focus skip link passed.
-- Playwright axe found zero serious/critical findings on the site and unpacked extension. The factory `verify-url.sh` passed with no console errors, one H1, one main, `lang=en`, title, labels, and image alt text.
-- Live service worker was activated and controlling, `registration.update()` succeeded, cache `caption-confidence-v2` existed, and offline reload retained the page and showed the offline notice.
-- Live first load made requests only to `caption-confidence.sociobot.in`; no analytics, remote scripts/fonts, caption upload, or unexpected request was observed.
+## Privacy, offline, and response policy
 
-Lighthouse 12.8.2 mobile against the live deployment: Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 1,070 ms, TBT 0 ms, CLS 0, total transfer 47,034 bytes.
+- A fresh live load requested only `https://caption-confidence.sociobot.in`; there were no analytics, beacons, remote scripts/fonts, caption uploads, console errors, page errors, or failed requests.
+- MV3 permissions remain only `activeTab` and `storage`; caption data remains local.
+- The live worker activated, controlled the page, accepted `registration.update()`, and exposed cache `caption-confidence-v2`. Offline reload retained the page and displayed the offline notice both before and after reload.
+- HTML and `sw.js` use `public, must-revalidate, max-age=30`; hashed assets use one-year immutable caching; the ZIP uses one hour.
+- Live responses include HSTS, `nosniff`, strict-origin referrer policy, camera/microphone/geolocation restrictions, CSP with `frame-ancestors 'none'`, and `X-Frame-Options: DENY`.
 
-Live identity after the final clean build/deploy:
+Lighthouse 13.0.1 mobile on the deployed URL, with full-page screenshot collection disabled to avoid the worker image's known Chrome cleanup crash: **100 Performance / 100 Accessibility / 100 Best Practices / 100 SEO**; FCP 849 ms, LCP 1,060 ms, TBT 0 ms, CLS 0, transfer 47,070 bytes.
 
-| Artifact | Local/live SHA-256 |
+## Deployment and live identity
+
+Deployed `dist/site` with the work order's static deployment helper. Azure Static Web Apps deployment ID: `bf92bdc8-bc18-44fa-b291-bfde0645f0b3`. Live URL: <https://caption-confidence.sociobot.in/>.
+
+Fresh local/live SHA-256 pairs match:
+
+| Artifact | SHA-256 |
 | --- | --- |
 | `index.html` | `497f45e7235b09c09d0a6eef389809b9a216da5cd9775de79929d86a036e6b52` |
 | `sw.js` | `1bc9994822f9c52c66634d100c28b353c2e9de09b2e8b8d45e6c73fd783089fe` |
-| `downloads/caption-confidence-chrome.zip` | `dd507ab283336e03736d6e1f821e179b4692e1c8ceebd0769b491f279d7ee360` |
+| `downloads/caption-confidence-chrome.zip` | `7c90ee5ee3759ee070090a3b24c0b3195da40ff44776f74030fc2c27e58f53df` |
+| `assets/main-RMVJOiRi.js` | `5f45f46488070bd01c4e8525f95319620c1ef7400196c7d036146fb2e9bd3a4b` |
+| `assets/main-8pAtrpcS.css` | `1c06f5b4052e58127693080a883234f19c7d8ca590de283bf5ff364977e02c23` |
 
-Live HTML and worker responses retain short revalidation caching; hashed assets retain one-year immutable caching; the ZIP retains one-hour caching. CSP, `frame-ancestors 'none'`, `X-Frame-Options: DENY`, HSTS, `nosniff`, strict-origin referrer policy, and camera/microphone/geolocation restrictions are present.
+## Remaining gaps
 
-## Remaining factory action
-
-Register and enable the live `$12` one-time `caption-confidence` product using the factory billing workflow, with return URL `https://caption-confidence.sociobot.in/`, then confirm the checkout endpoint returns a hosted-checkout redirect. No repository or static-site redeployment is needed for that action.
+None known. The original browser-extension artifact class, static deployment class, researched scope, privacy boundary, and all previously passing behavior are preserved.
