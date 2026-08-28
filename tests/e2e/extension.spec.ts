@@ -29,6 +29,10 @@ test('extension reads a page track, highlights a pair, and replays with R', asyn
 
     const popup = await context.newPage();
     await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+    await expect(popup.getByRole('link', { name: 'Support & unlock finishes' })).toHaveAttribute(
+      'href',
+      'https://api.sociobot.in/api/v1/products/caption-confidence/checkout'
+    );
     const undersizedControls = await popup.locator('a, button, input:not([type="file"]), select, textarea').evaluateAll((elements) => elements
       .filter((element) => {
         const style = getComputedStyle(element);

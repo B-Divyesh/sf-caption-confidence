@@ -30,6 +30,10 @@ test('landing page has core content, download, and no serious accessibility issu
   await expect(page).toHaveTitle(/Caption Confidence/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expect(page.getByRole('link', { name: 'Download extension ZIP' })).toHaveAttribute('href', /caption-confidence-chrome\.zip/);
+  await expect(page.getByRole('link', { name: 'Support & unlock', exact: true })).toHaveAttribute(
+    'href',
+    'https://api.sociobot.in/api/v1/products/caption-confidence/checkout'
+  );
   const results = await new AxeBuilder({ page: page as never }).analyze();
   expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''))).toEqual([]);
   expect(consoleErrors).toEqual([]);

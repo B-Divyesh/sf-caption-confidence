@@ -43,6 +43,7 @@ npm run check
 npm test
 npm run build
 npm run test:e2e
+npm run verify:billing
 ```
 
 `npm run build` is the production build command. It creates:
@@ -54,6 +55,7 @@ npm run test:e2e
 `npm run build:site` is also deploy-ready: it builds the MV3 extension first, then emits the static site together with its linked ZIP and service worker under `dist/site/`.
 
 The end-to-end suite uses pinned Playwright 1.58.2. On Linux it runs under Xvfb so Chromium can load the unpacked extension.
+`npm run verify:billing` is the release-time live dependency check: it requires the approved Sociobot endpoint to redirect to its hosted checkout.
 
 ## Privacy and permissions
 
