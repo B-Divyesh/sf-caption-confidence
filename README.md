@@ -50,6 +50,8 @@ npm run test:e2e
 - `dist/site/index.html` — static deploy root
 - `dist/site/downloads/caption-confidence-chrome.zip` — packaged download linked by the site
 
+`npm run build:site` is also deploy-ready: it builds the MV3 extension first, then emits the static site together with its linked ZIP and service worker under `dist/site/`.
+
 The end-to-end suite uses pinned Playwright 1.58.2. On Linux it runs under Xvfb so Chromium can load the unpacked extension.
 
 ## Privacy and permissions

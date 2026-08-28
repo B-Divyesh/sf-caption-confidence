@@ -74,6 +74,6 @@ window.addEventListener('online', updateOnlineState);
 window.addEventListener('offline', updateOnlineState);
 updateOnlineState();
 
-if ('serviceWorker' in navigator && location.protocol === 'https:') {
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', () => void navigator.serviceWorker.register('/sw.js'));
 }

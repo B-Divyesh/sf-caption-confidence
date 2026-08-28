@@ -81,11 +81,11 @@ export default defineContentScript({
       requestAnimationFrame(() => caption.classList.add('visible'));
     }
 
-    function update(): void {
+    function update(forceRender: boolean | Event = false): void {
       if (!selectedVideo || !cues.length) return showCue(null);
       const time = selectedVideo.currentTime;
       const current = cues.find((cue) => time >= cue.start && time <= cue.end) ?? null;
-      if (current?.id !== activeCue?.id) showCue(current);
+      if (forceRender === true || current?.id !== activeCue?.id) showCue(current);
       else if (current) placeOverlay();
     }
 
@@ -160,7 +160,9 @@ export default defineContentScript({
         }
         if (message.type === 'CC_SETTINGS') {
           settings = message.settings;
-          update();
+          // A setting can change markup or visibility without changing playback time.
+          // Re-render the active cue so the popup always gives immediate feedback.
+          update(true);
           return { ok: true };
         }
         if (message.type === 'CC_REPLAY') return replay();

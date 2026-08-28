@@ -24,7 +24,7 @@ test('extension reads a page track, highlights a pair, and replays with R', asyn
       Object.defineProperty(video, 'play', { configurable: true, value: () => Promise.resolve() });
       const track = video.addTextTrack('captions', 'English', 'en');
       track.mode = 'showing';
-      track.addCue(new VTTCue(0, 3, 'The ship leaves now.'));
+      track.addCue(new VTTCue(0, 0.5, 'The ship leaves now.'));
     });
 
     const popup = await context.newPage();
@@ -40,6 +40,29 @@ test('extension reads a page track, highlights a pair, and replays with R', asyn
     await expect.poll(() => page.evaluate(() => document.querySelector('#caption-confidence-root')?.shadowRoot?.textContent ?? '')).toContain('The ship leaves now.');
     const hasMark = await page.evaluate(() => Boolean(document.querySelector('#caption-confidence-root')?.shadowRoot?.querySelector('mark')));
     expect(hasMark).toBe(true);
+    await expect.poll(() => page.evaluate(() => document.querySelector('#caption-confidence-root')?.shadowRoot?.textContent ?? '')).toContain('tight timing');
+
+    await popup.locator('#pairs').fill('vine / wine');
+    await popup.locator('#pairs').press('Tab');
+    await expect.poll(() => page.evaluate(() => Boolean(document.querySelector('#caption-confidence-root')?.shadowRoot?.querySelector('mark')))).toBe(false);
+
+    await popup.locator('#font-size').fill('42');
+    await expect.poll(() => page.evaluate(() => document.querySelector<HTMLElement>('#caption-confidence-root')?.shadowRoot?.querySelector<HTMLElement>('.caption')?.style.fontSize)).toBe('42px');
+
+    await popup.locator('#show-timing').uncheck();
+    await expect.poll(() => page.evaluate(() => document.querySelector('#caption-confidence-root')?.shadowRoot?.textContent ?? '')).not.toContain('tight timing');
+
+    await popup.locator('#appearance').evaluate((control: HTMLSelectElement) => {
+      control.disabled = false;
+      control.value = 'paper';
+      control.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await expect.poll(() => page.evaluate(() => document.querySelector('#caption-confidence-root')?.shadowRoot?.querySelector('.caption')?.classList.contains('theme-paper'))).toBe(true);
+
+    await popup.locator('#overlay-enabled').uncheck();
+    await expect.poll(() => page.evaluate(() => document.querySelector<HTMLElement>('#caption-confidence-root')?.style.display)).toBe('none');
+    await popup.locator('#overlay-enabled').check();
+    await expect.poll(() => page.evaluate(() => document.querySelector<HTMLElement>('#caption-confidence-root')?.style.display)).toBe('block');
 
     await page.keyboard.press('r');
     await expect.poll(() => page.evaluate(() => document.querySelector<HTMLVideoElement>('#clip')!.currentTime)).toBe(0);
