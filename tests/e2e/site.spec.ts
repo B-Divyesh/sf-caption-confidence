@@ -2,12 +2,16 @@ import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 test('landing page has core content, download, and no serious accessibility issues', async ({ page }) => {
+  const consoleErrors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  page.on('pageerror', (error) => consoleErrors.push(error.message));
   await page.goto('/');
   await expect(page).toHaveTitle(/Caption Confidence/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expect(page.getByRole('link', { name: 'Download extension ZIP' })).toHaveAttribute('href', /caption-confidence-chrome\.zip/);
   const results = await new AxeBuilder({ page: page as never }).analyze();
   expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''))).toEqual([]);
+  expect(consoleErrors).toEqual([]);
 });
 
 test('mobile layout keeps primary action visible', async ({ page }) => {

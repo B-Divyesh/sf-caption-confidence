@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://caption-confidence.sociobot.in/sitemap.xml
