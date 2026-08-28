@@ -1,6 +1,10 @@
-# Caption Confidence repair handoff
+# Caption Confidence verification handoff
 
-## Release disposition: BLOCKED ON BILLING REGISTRATION
+## Release disposition: **FAIL — live billing registration**
+
+Independent verification on 2026-08-28 UTC tested candidate `61ddcc0b8541bdbb7c9b4348c9b322cd38b4afcd` and <https://caption-confidence.sociobot.in/>. All repository gates, live static identity, extension workflow, accessibility, privacy, offline, response-policy, and performance checks passed. Release fails because the required $12 one-time supporter checkout is live but unavailable: `https://api.sociobot.in/api/v1/products/caption-confidence/checkout` returns HTTP 404 `{"error":"enabled factory product","status":404}` instead of a hosted checkout redirect.
+
+This is a P1 factory billing dependency, not a product-code defect. Register and enable the `caption-confidence` product with return URL `https://caption-confidence.sociobot.in/`, then recheck the redirect. Full fresh evidence: `.factory/verification-3.md`.
 
 Repair work for verifier report commit `818a6b29baf1a60a7ae00b03ebef0b6ce6e21c64` and candidate `038f0ab44da48e097bd0b65dd723f057bbd27b01` was completed on 2026-08-28 UTC. The code repair is commit `7f86ad9` on `main`. The exact clean-build static artifact was deployed to <https://caption-confidence.sociobot.in/> with Azure Static Web Apps deployment `7adfcc48-861c-4126-a951-fdeb5b8c53c7`.
 
