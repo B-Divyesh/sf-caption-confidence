@@ -33,7 +33,12 @@ Verified 2026-08-28 UTC:
 
 ## Deployment
 
-Deploy the static build root `dist/site/`. It contains the linked ZIP, `/sw.js`, public assets, and `staticwebapp.config.json`; no separate artifact-copy step is required. After deployment, confirm `GET /downloads/caption-confidence-chrome.zip` and `GET /sw.js` both return 200, then verify the CSP and anti-framing response headers on the live origin.
+Deployed to <https://caption-confidence.sociobot.in/> on 2026-08-28 UTC with the factory static deployment configuration (`dist/site`). The Azure deployment completed successfully as deployment ID `841d784d-e9fb-4150-b56d-abf0651b9251`.
+
+- Live `index.html`, `/downloads/caption-confidence-chrome.zip`, and `/sw.js` SHA-256-match their respective `dist/site` files.
+- The live ZIP is **200**, `application/zip`, 16,212 B, and begins with valid `PK\003\004` ZIP magic. The live worker is **200**, `text/javascript`, 925 B.
+- The live response sends the configured CSP with `frame-ancestors 'none'`, `X-Frame-Options: DENY`, plus the existing nosniff, referrer, and permissions policies.
+- Fresh Chromium desktop (1440×900) and mobile (390×844) checks both reached a controlling service worker, completed an offline reload, and emitted no console or page errors.
 
 ## Known boundaries
 
