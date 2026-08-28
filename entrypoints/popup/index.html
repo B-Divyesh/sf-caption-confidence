@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caption Confidence</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to settings</a>
+    <header class="masthead">
+      <div class="brand-mark" aria-hidden="true"><span></span><i></i></div>
+      <div>
+        <p class="eyebrow">Local caption tool</p>
+        <h1>Caption<br />Confidence</h1>
+      </div>
+    </header>
+    <main id="main">
+      <section class="source" aria-labelledby="source-title">
+        <div class="section-heading">
+          <p class="step">01 / Source</p>
+          <h2 id="source-title">Connect captions</h2>
+        </div>
+        <p id="page-state" class="state" role="status">Looking for a video…</p>
+        <div class="action-stack">
+          <input id="caption-file" type="file" accept=".vtt,.srt,text/vtt,application/x-subrip" />
+          <label class="button primary" for="caption-file">Import VTT or SRT</label>
+          <button id="use-track" class="button" type="button">Use page caption track</button>
+        </div>
+        <p class="microcopy">Files stay in this tab. The extension never uploads or generates captions.</p>
+      </section>
+
+      <section aria-labelledby="emphasis-title">
+        <div class="section-heading">
+          <p class="step">02 / Attention</p>
+          <h2 id="emphasis-title">Mark easy-to-miss words</h2>
+        </div>
+        <label for="pairs">Word pairs, one pair per line</label>
+        <textarea id="pairs" rows="4" spellcheck="false" aria-describedby="pairs-help"></textarea>
+        <p id="pairs-help" class="microcopy">Use exact words, separated by “/”. Example: <span>sip / ship</span>.</p>
+        <div class="toggle-row">
+          <div>
+            <label for="show-timing">Flag tight timing</label>
+            <p>Marks captions that overlap or move unusually fast.</p>
+          </div>
+          <input id="show-timing" type="checkbox" />
+        </div>
+        <div class="toggle-row">
+          <div>
+            <label for="overlay-enabled">Show enhanced captions</label>
+            <p>Keep your imported track ready when hidden.</p>
+          </div>
+          <input id="overlay-enabled" type="checkbox" />
+        </div>
+      </section>
+
+      <section aria-labelledby="display-title">
+        <div class="section-heading">
+          <p class="step">03 / Read</p>
+          <h2 id="display-title">Fit the caption</h2>
+        </div>
+        <label class="range-label" for="font-size">Text size <output id="font-output">30 px</output></label>
+        <input id="font-size" type="range" min="20" max="48" step="2" />
+        <label class="range-label" for="replay-lead">Replay lead-in <output id="replay-output">0.8 s</output></label>
+        <input id="replay-lead" type="range" min="0" max="3" step="0.2" />
+        <button id="replay" class="button replay" type="button"><span aria-hidden="true">↶</span> Replay current caption</button>
+        <p class="key-tip"><kbd>R</kbd> on the page · <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> globally</p>
+      </section>
+
+      <section class="supporter" aria-labelledby="supporter-title">
+        <div class="section-heading">
+          <p class="step">04 / Finish</p>
+          <h2 id="supporter-title">Supporter finishes</h2>
+        </div>
+        <p class="price-line"><strong>$12 once</strong> · Core listening tools always stay free.</p>
+        <label for="appearance">Caption finish</label>
+        <select id="appearance">
+          <option value="standard">Soot — included</option>
+          <option value="moss">Deep moss — supporter</option>
+          <option value="paper">Paper slab — supporter</option>
+        </select>
+        <a class="button supporter-buy" href="https://api.sociobot.in/api/v1/products/caption-confidence/checkout" target="_blank">Support &amp; unlock finishes</a>
+        <form id="license-form">
+          <label for="license">Have a license? Paste it</label>
+          <div class="license-row"><input id="license" autocomplete="off" /><button type="submit">Verify</button></div>
+        </form>
+        <p id="license-state" class="microcopy" aria-live="polite">No license needed for caption tools.</p>
+        <p class="legal-links"><a href="https://caption-confidence.sociobot.in/privacy" target="_blank">Privacy</a> · <a href="https://caption-confidence.sociobot.in/terms" target="_blank">Terms</a> · Sociobot/Dodo is merchant of record.</p>
+      </section>
+
+      <div id="message" class="message" aria-live="polite"></div>
+    </main>
+    <footer><span>Runs locally</span><a href="https://caption-confidence.sociobot.in/privacy" target="_blank">Privacy</a></footer>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

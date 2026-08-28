@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Caption Confidence icon">
+  <rect width="128" height="128" rx="12" fill="#171b17"/>
+  <path d="M18 28h92v72H18z" fill="#77796f" stroke="#f3f0e7" stroke-width="4"/>
+  <path d="M31 43h63v14H31zm0 28h63v14H31z" fill="#171b17"/>
+  <path d="M92 28h12v72H92z" fill="#d6e35a"/>
+</svg>
