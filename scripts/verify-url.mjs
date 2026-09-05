@@ -20,7 +20,9 @@ try {
     const page = await context.newPage();
     const errors = [];
     page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(`console: ${message.text()}`);
+      const expectedNavigation404 = route.status === 404
+        && message.text().includes('the server responded with a status of 404');
+      if (message.type() === 'error' && !expectedNavigation404) errors.push(`console: ${message.text()}`);
     });
     page.on('pageerror', (error) => errors.push(`page: ${error.message}`));
     page.on('requestfailed', (request) => errors.push(`request: ${request.url()} ${request.failure()?.errorText ?? ''}`));
