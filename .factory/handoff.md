@@ -1,78 +1,52 @@
-# Caption Confidence repair handoff
+# Caption Confidence verification 5 handoff
 
-## Release disposition
+## Result
 
-PASS for the repository and deployed static product.
+**FAIL — 2 P2 findings and 2 incompletely tested public claims.**
 
-- Work order: `caption-confidence-repair-4`
-- Deployed product implementation: `64b7b56e8562e45946c8f351ab0758e9a8ad1a2a`
-- Later verification-tooling commit: `3e3dfebfc79506d5ff81b95806e08e90ca6049f6`
-- Live URL: <https://caption-confidence.sociobot.in/>
-- Demo URL: <https://caption-confidence.sociobot.in/demo/>
-- Deployment target: existing `sf-caption-confidence` Static Web App
-- Deployed: 5 September 2026 UTC
+- Work order: `caption-confidence-verify-5`
+- Implementation reviewed: `64b7b56e8562e45946c8f351ab0758e9a8ad1a2a`
+- Verification tooling: `3e3dfebfc79506d5ff81b95806e08e90ca6049f6`
+- Documentation at verification start: `83a1e21982e8534cecf1c673cc1f96df84a7c547`
+- Live: <https://caption-confidence.sociobot.in/>
+- Demo: <https://caption-confidence.sociobot.in/demo/>
+- Full report: [`.factory/verification-5.md`](verification-5.md)
 
-The live runtime matches the implementation commit. The later commit changes only the URL verifier so a deliberate HTTP 404 is treated as expected when its page is correctly designed.
+Product code was not changed. The live implementation works in the tested desktop, phone, offline-demo, checkout, license, extension, download, accessibility, privacy, and designed-404 paths. Release acceptance fails because two required per-claim tests prove only part of their public wording.
 
-## What changed
+## Findings to repair
 
-- Added a one-click demo with four populated caption lines, exact word-pair editing, uncertainty and timing labels, caption sizing, cue selection, keyboard/button replay, and VTT/SRT import.
-- Isolated the demo from real state. It uses only the `demo:caption-confidence:` session namespace; reset and exit clear that namespace.
-- Rewrote the first screen to name the job, audience, first action, action result, privacy, free core, and optional price before scrolling.
-- Added `.factory/claims.json` with 18 public claims and exactly one tagged outcome test for each.
-- Added a designed 404 response, route-specific titles, descriptions, canonicals, Open Graph and Twitter metadata, a 1200×630 original social image, sitemap coverage, and consistent navigation.
-- Added `verify-url.sh` for status, title, language, landmarks, image alternatives, labels, and console errors.
-- Updated the service worker to precache hashed site assets and keep the populated demo functional after an offline reload.
-- Fixed an extension edge case where importing a replacement caption file with a reused cue ID could leave the old caption visible.
-- Updated README, demo documentation, copy audit, catalog description, visual provenance, and legal copy.
+1. `@claim:free-core` checks that controls are enabled or visible. It does not perform and assert import, highlighting, timing labels, replay, and settings without a license.
+2. `@claim:supporter-checkout` checks the redirect, hosted product, price, and one-time wording. It does not use a recorded valid verdict to prove that an optional appearance becomes enabled and applies.
 
-## Review finding disposition
+Independent QA manually confirmed both outcomes work. The repair is test evidence, not product behavior. Keep exactly one tagged outcome test for each claim.
 
-| Review finding | Disposition |
+## Verification completed
+
+| Command or check | Result |
 | --- | --- |
-| No one-click demo sandbox | Fixed at `/demo/`; sample, persistent banner, reset, real start, isolation, and direct URL are tested. |
-| No claims manifest; 20 claims untested | Fixed; unsupported wording was removed or narrowed, and 18 retained claims have tagged outcome tests. |
-| First-screen copy did not state job or audience | Fixed; desktop and 390 px cold checks show the job, audience, primary sample action, result, and three facts before scrolling. |
-| Missing demo, designed 404, and metadata structure | Fixed; all routes have unique metadata and the unknown-route response is the designed page with HTTP 404. |
-| Missing `verify-url.sh` | Fixed; local and live runs pass all routes, including the expected 404 response. |
-
-Earlier findings remain fixed: the live ZIP is installable, the service worker loads without console errors, active settings redraw the current cue, security headers are present, the checkout redirects, 320 px layouts do not overflow, controls meet 44 px targets, audits report no dependency vulnerabilities, and cached invalid-license notices persist.
-
-## Verification
-
-A fresh clone of implementation `64b7b56` was created under `/tmp/cc-clean.sWnGWI`. From that clone:
-
-| Command | Result |
-| --- | --- |
-| `npm ci` | PASS; 341 packages, 0 vulnerabilities |
+| `npm ci` | PASS — 341 packages, 0 vulnerabilities |
 | `npm run lint` | PASS |
 | `npm run check` | PASS |
-| `npm test` | PASS; 8/8 |
-| `npm run build` | PASS; extension, site, and ZIP emitted |
-| `npm audit --omit=dev` | PASS; 0 vulnerabilities |
-| `npm audit` | PASS; 0 vulnerabilities |
-| `npm run test:e2e` | PASS; 19/19 |
-| `npm run verify:claims` | PASS; all 18 manifest commands ran independently |
-| `npm run verify:billing` | PASS; 303 to hosted Dodo checkout |
-| `./verify-url.sh http://127.0.0.1:4173` | PASS; home, demo, privacy, terms, and local 404 |
+| `npm test` | PASS — 8/8 |
+| `npm run build` | PASS |
+| `npm audit --omit=dev`; `npm audit` | PASS — 0 vulnerabilities |
+| `npm run test:e2e` | PASS — 19/19 |
+| `npm run verify:claims` | Command PASS — 18/18; 2 commands are semantically incomplete |
+| `npm run verify:billing` | PASS — HTTP 303 to Dodo checkout |
+| Live `verify-url.sh` | PASS, including expected designed HTTP 404 |
 
-The local Playwright accessibility scan found zero serious or critical issues on every route. It also checked 390 px and 320 px layouts, touch targets, focus, reduced motion, internal links, invalid and oversized files, recovery, offline reload, and the unpacked extension.
+Fresh live checks confirmed:
 
-Production was deployed successfully. Fresh live checks found:
+- The desktop and phone first screens state the caption-highlighting job, audience, sample action, action result, and three facts before scrolling.
+- The four-cue demo updates exact-word marks, replays from the lead-in, resets, preserves a real-data sentinel, clears its session namespace on exit, and reloads populated while offline.
+- Invalid extension, malformed caption data, over-5-MB input, no exposed track, and valid recovery paths give usable results.
+- The downloaded MV3 ZIP extracts cleanly and its payload matches the local build. A clean Chromium profile used the live artifact successfully.
+- Home, demo, legal pages, and designed 404 have correct titles and structure, no serious or critical axe results, no narrow-width overflow, and no sub-44 px visible controls.
+- Same-origin request checks found no tracking or caption upload. Live license verification sent only the token, cached the verdict, and kept the inactive notice after reload.
+- Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.08 s, CLS 0.
 
-- Local/live SHA-256 matches for home HTML, demo HTML, and `sw.js`.
-- Desktop 1440×900 and phone 390×844: the first action is in the initial viewport, no horizontal overflow, no console errors, and no external request during sample use.
-- Demo: `ship` is marked initially, a changed pair marks `last`, R replays from `00:00.0`, reset restores `ship`, and a real-data sentinel stays unchanged.
-- **Start for real** clears the demo key and opens `/#download`.
-- Offline demo reload: HTTP 200 with populated output and an offline notice.
-- Unknown route: HTTP 404 with title `Page not found — Caption Confidence` and H1 `Return to Caption Confidence`.
-- Live axe checks: zero serious or critical issues on home, demo, privacy, and terms in desktop and phone contexts.
-- Live Lighthouse mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.1 s; CLS 0; 47 KiB transfer.
-- Initial JavaScript: 9.6 KB uncompressed across shared, home, and demo bundles. CSS: 18.6 KB. No web fonts. Social image: 168 KB.
-- Security policy includes CSP, `frame-ancestors 'none'`, `X-Frame-Options: DENY`, `nosniff`, strict-origin referrer policy, and restricted device permissions.
-- The live ZIP extracts without errors and matches the local build payload.
-
-## How to run
+## How to verify after repair
 
 ```bash
 npm ci
@@ -83,11 +57,11 @@ npm run build
 npm run test:e2e
 npm run verify:claims
 npm run verify:billing
-npx vite preview --outDir dist/site --host 127.0.0.1
-./verify-url.sh http://127.0.0.1:4173
+./verify-url.sh https://caption-confidence.sociobot.in
 ```
 
-## Known gaps
+Inspect the two focused claim commands as well as their exit status. Each must assert the complete claim outcome.
 
-- Chrome Web Store distribution is not part of this repository. Users install the downloadable MV3 ZIP in Developer mode.
-- Lighthouse did not report INP because the audited page load had no qualifying interaction. Interaction paths are covered by Playwright.
+## Known distribution limit
+
+Chrome Web Store publication is outside this repository. Installation uses the tested downloadable MV3 ZIP.
