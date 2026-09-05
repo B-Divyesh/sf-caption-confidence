@@ -1,0 +1,1 @@
+Highlight chosen caption words and replay the current line without uploading caption text.

@@ -3,102 +3,131 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Caption Confidence highlights easy-to-miss words in captions you already have and replays the current line with one key." />
+    <meta name="description" content="Highlight chosen words in captions you can access, see timing warnings, and replay the current line." />
     <meta name="theme-color" content="#f3f0e7" />
-    <title>Caption Confidence — catch the word, keep the moment</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Caption Confidence — highlight uncertain caption words" />
+    <meta property="og:description" content="Highlight chosen words in captions you can access, see timing warnings, and replay the current line." />
+    <meta property="og:url" content="https://caption-confidence.sociobot.in/" />
+    <meta property="og:image" content="https://caption-confidence.sociobot.in/assets/caption-confidence-social.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A concrete caption instrument with two caption slots and a moss marker." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Caption Confidence — highlight uncertain caption words" />
+    <meta name="twitter:description" content="Highlight chosen words in captions you can access, see timing warnings, and replay the current line." />
+    <meta name="twitter:image" content="https://caption-confidence.sociobot.in/assets/caption-confidence-social.jpg" />
+    <title>Caption Confidence — highlight uncertain caption words</title>
+    <link rel="canonical" href="https://caption-confidence.sociobot.in/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" as="image" href="/assets/caption-instrument-768.webp" type="image/webp" fetchpriority="high" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
-  <body>
+  <body data-route="home">
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header">
       <a class="wordmark" href="/" aria-label="Caption Confidence home"><span class="mark" aria-hidden="true"><i></i><b></b></span><span>Caption<br />Confidence</span></a>
       <nav aria-label="Primary navigation">
-        <a href="#how">How it works</a>
-        <a href="#supporter">Supporter</a>
-        <a class="nav-download" href="#download">Get the extension</a>
+        <a href="/demo/">Demo</a>
+        <a href="#download">Install</a>
+        <a href="/privacy/">Privacy</a>
       </nav>
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="measure-rail" aria-hidden="true"><span>00:14.280</span><span>LOCAL / TRACK</span></div>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="measure-rail" aria-hidden="true"><span>00:14.280</span><span>LOCAL CAPTIONS</span></div>
         <div class="hero-copy">
-          <p class="kicker"><span>Accessibility utility</span> for captions you can access</p>
-          <h1>Catch the word.<br /><em>Keep the moment.</em></h1>
-          <p class="lede">Caption Confidence marks the words you find easy to miss and lets you replay the current caption with one key—without sending your video or transcript anywhere.</p>
+          <p class="kicker">Caption help for words you miss</p>
+          <h1 id="page-title">Spot uncertain words in captions</h1>
+          <p class="lede">For people with high-frequency hearing loss who miss caption words and want fewer replays.</p>
           <div class="hero-actions">
-            <a class="slab primary" href="#download">Download for Chrome</a>
-            <a class="text-link" href="#how">See the 3-step flow <span aria-hidden="true">↓</span></a>
+            <a class="slab primary" href="/demo/">Try it with sample data</a>
+            <span class="action-note">Opens a loaded caption example.</span>
           </div>
-          <p class="compatibility">Free core tools · Chrome and Chromium browsers · No account</p>
+          <ul class="plain-facts" aria-label="Product facts">
+            <li>Caption text stays on your device.</li>
+            <li>Core caption tools need no account or license.</li>
+            <li>Optional caption styles cost $12 once.</li>
+          </ul>
         </div>
         <figure class="hero-art">
           <picture>
             <source media="(max-width: 720px)" srcset="/assets/caption-instrument-768.webp" />
-            <img src="/assets/caption-instrument-1280.webp" srcset="/assets/caption-instrument-768.webp 768w, /assets/caption-instrument-1280.webp 1280w" sizes="(max-width: 800px) 100vw, 52vw" width="1280" height="853" alt="Abstract cast-concrete caption instrument with two dark caption slots and a narrow seam of green moss" decoding="async" fetchpriority="high" />
+            <img src="/assets/caption-instrument-1280.webp" srcset="/assets/caption-instrument-768.webp 768w, /assets/caption-instrument-1280.webp 1280w" sizes="(max-width: 800px) 100vw, 52vw" width="1280" height="853" alt="A concrete caption instrument with two dark caption slots and a green moss marker." decoding="async" fetchpriority="high" />
           </picture>
-          <figcaption><span>Fig. 01</span> Concrete certainty. Moss where attention belongs.</figcaption>
-          <div class="caption-sample" aria-label="Example enhanced caption">
+          <figcaption><span>Caption preview</span> The marker shows a word selected for extra attention.</figcaption>
+          <div class="caption-sample" aria-label="Example caption with two highlighted words">
             “Did she say <mark>sip</mark> or <mark>ship</mark>?”
-            <small>user pair</small>
+            <small>chosen word pair</small>
           </div>
         </figure>
       </section>
 
-      <section class="proof-strip" aria-label="Product principles">
-        <span><b>01</b> Your captions stay local</span>
-        <span><b>02</b> You choose the word pairs</span>
-        <span><b>03</b> R replays the current line</span>
+      <section class="proof-strip" aria-label="Main functions">
+        <span><b>01</b> Import VTT or SRT</span>
+        <span><b>02</b> Choose exact word pairs</span>
+        <span><b>03</b> Press R to replay</span>
+      </section>
+
+      <section class="specimen section-pad" aria-labelledby="preview-title">
+        <div>
+          <p class="overline">Product preview</p>
+          <h2 id="preview-title">See highlighted words in context</h2>
+          <p>The extension marks your chosen words. It also labels source uncertainty and tight caption timing.</p>
+          <a class="text-link" href="/demo/">Open the interactive sample</a>
+        </div>
+        <div class="video-frame" role="img" aria-label="A caption example with ship highlighted and a tight timing label.">
+          <span class="video-label">Caption example</span>
+          <blockquote>“The last <mark>ship</mark> leaves at six.” <small>tight timing</small></blockquote>
+          <div class="timeline"><i></i><span>00:42</span><span>00:46</span></div>
+        </div>
       </section>
 
       <section id="how" class="how section-pad" aria-labelledby="how-title">
         <div class="section-intro">
-          <p class="overline">How it works / 90 seconds</p>
-          <h2 id="how-title">Add a layer of attention.<br />Nothing more.</h2>
-          <p>Caption Confidence improves a track you already have. It does not transcribe audio, scrape protected streams, or make medical claims.</p>
+          <p class="overline">How it works</p>
+          <h2 id="how-title">Use Caption Confidence in three steps</h2>
+          <p>Use a caption file you have or a caption track the page exposes.</p>
         </div>
         <ol class="steps">
           <li>
             <span class="step-no">01</span>
             <div class="diagram file-diagram" aria-hidden="true"><span>WEBVTT</span><i></i><i></i><i></i></div>
             <h3>Bring captions</h3>
-            <p>Import a local VTT or SRT file, or read a caption track that an HTML5 video exposes.</p>
+            <p>Import a VTT or SRT file, or use an exposed HTML5 caption track.</p>
           </li>
           <li>
             <span class="step-no">02</span>
             <div class="diagram words-diagram" aria-hidden="true"><span>SIP</span><b>/</b><span>SHIP</span></div>
-            <h3>Name your pairs</h3>
-            <p>Add the exact words you tend to confuse. Matching words receive a high-contrast lichen mark.</p>
+            <h3>Choose word pairs</h3>
+            <p>Add the exact words you confuse. Matching words get a high-contrast mark.</p>
           </li>
           <li>
             <span class="step-no">03</span>
             <div class="diagram key-diagram" aria-hidden="true"><kbd>R</kbd><span>−0.8 s</span></div>
-            <h3>Replay once</h3>
-            <p>Press R from the page to return to the start of the current caption, with your chosen lead-in.</p>
+            <h3>Replay the line</h3>
+            <p>Press R to return to the current caption with your chosen lead-in.</p>
           </li>
         </ol>
       </section>
 
-      <section class="specimen section-pad" aria-labelledby="specimen-title">
+      <section class="limits section-pad" aria-labelledby="limits-title">
+        <p class="overline">Privacy and limits</p>
+        <h2 id="limits-title">Know what the extension reads</h2>
         <div>
-          <p class="overline">Honest signals</p>
-          <h2 id="specimen-title">Emphasis you control.</h2>
-          <p>The extension also labels source-authored uncertainty and unusually tight or overlapping cue timing. Timing flags describe the caption file—not the speaker or your hearing.</p>
+          <p><strong>It reads</strong><br />Caption files you choose and caption tracks exposed by the current page.</p>
+          <p><strong>It does not create</strong><br />The extension does not make captions when a page has no accessible track.</p>
         </div>
-        <div class="video-frame" role="img" aria-label="Caption example showing the word ship highlighted and a tight timing label">
-          <span class="video-label">Caption specimen / no video uploaded</span>
-          <blockquote>“The last <mark>ship</mark> leaves at six.” <small>tight timing</small></blockquote>
-          <div class="timeline"><i></i><span>00:42</span><span>00:46</span></div>
-        </div>
+        <p class="limits-note">It marks caption text and timing patterns. It does not diagnose hearing loss.</p>
       </section>
 
       <section id="download" class="download section-pad" aria-labelledby="download-title">
         <div>
-          <p class="overline">Version 1.0 / MV3</p>
-          <h2 id="download-title">Set up in one minute.</h2>
-          <p>The download is an unpacked Chrome extension package while store review is pending. Your browser will show its requested access before installation.</p>
+          <p class="overline">Chrome extension</p>
+          <h2 id="download-title">Install the extension package</h2>
+          <p>Install the supplied Manifest V3 package in Developer mode.</p>
         </div>
         <div class="install-block">
           <a class="slab primary large" href="/downloads/caption-confidence-chrome.zip" download>Download extension ZIP</a>
@@ -107,50 +136,37 @@
             <li>Open <code>chrome://extensions</code> and enable Developer mode.</li>
             <li>Choose “Load unpacked” and select the unzipped folder.</li>
           </ol>
-          <p class="privacy-note"><span aria-hidden="true">■</span> Permission scope: the active page, local settings, and web pages with video. No browsing history is collected.</p>
+          <p class="privacy-note">The package requests the active page, local settings, and access to web pages with video.</p>
         </div>
       </section>
 
       <section id="supporter" class="supporter section-pad" aria-labelledby="supporter-title">
         <div>
-          <p class="overline">Optional supporter unlock</p>
-          <h2 id="supporter-title">The listening tools stay free.</h2>
-          <p>Pay once to support maintenance and unlock named appearance profiles plus moss and paper caption finishes. Import, emphasis, timing flags, replay, and settings are never paywalled.</p>
-          <ul class="ticks">
-            <li>One-time purchase, no subscription</li>
-            <li>Use your license on your own devices</li>
-            <li>Sociobot/Dodo is merchant of record</li>
-          </ul>
+          <p class="overline">Optional purchase</p>
+          <h2 id="supporter-title">Buy optional caption styles</h2>
+          <p>The $12 one-time purchase adds named appearance profiles, plus moss and paper caption finishes.</p>
+          <p>Import, word highlights, timing labels, replay, and settings work without a license.</p>
         </div>
         <div class="price-slab">
           <p class="price"><span>$</span>12 <small>one time</small></p>
-          <a class="slab primary large" href="https://api.sociobot.in/api/v1/products/caption-confidence/checkout" data-buy>Support &amp; unlock</a>
-          <p><a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · Refunds are handled by the merchant of record.</p>
+          <a class="slab primary large" href="https://api.sociobot.in/api/v1/products/caption-confidence/checkout" data-buy>Open secure checkout</a>
+          <p>Sociobot and Dodo handle payment, receipts, and eligible refunds.</p>
           <form id="restore-form">
-            <label for="license">Already purchased? Paste your license</label>
-            <div><input id="license" name="license" autocomplete="off" required /><button type="submit">Verify</button></div>
+            <label for="license">Paste a license from your receipt</label>
+            <div><input id="license" name="license" autocomplete="off" required /><button type="submit">Verify license</button></div>
           </form>
-          <p id="license-status" class="license-status" aria-live="polite">The free extension works without a license.</p>
-        </div>
-      </section>
-
-      <section class="limits section-pad" aria-labelledby="limits-title">
-        <p class="overline">Clear boundaries</p>
-        <h2 id="limits-title">Built for accessible tracks.</h2>
-        <div>
-          <p><strong>It can</strong><br />Read captions you import or a page exposes, mark exact word pairs, identify formatting strain, and replay a cue.</p>
-          <p><strong>It cannot</strong><br />Open DRM captions, generate a transcript, judge speech accuracy, or diagnose hearing loss.</p>
+          <p id="license-status" class="license-status" aria-live="polite">The caption tools work without a license.</p>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <a class="wordmark inverse" href="/" aria-label="Caption Confidence home"><span class="mark" aria-hidden="true"><i></i><b></b></span><span>Caption<br />Confidence</span></a>
-      <p>Made for the words between “heard” and “understood.”</p>
-      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-caption-confidence">Source</a></nav>
-      <small>Original generated artwork · © 2026 Sociobot / Param Factory</small>
+      <p>Highlight chosen caption words and replay the current line.</p>
+      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-caption-confidence">Source code</a></nav>
+      <small>Version 1.0 · Built by Param Factory · Original generated artwork</small>
     </footer>
-    <div id="offline" class="offline" role="status" hidden>You’re offline. The download and purchase links need a connection; the installed extension keeps working locally.</div>
+    <div id="offline" class="offline" role="status" hidden>You are offline. Reconnect to download the extension or open checkout.</div>
     <script type="module" src="/main.ts"></script>
   </body>
 </html>

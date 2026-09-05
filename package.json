@@ -11,7 +11,10 @@
     "build": "node scripts/clean.mjs && npm run build:site",
     "test": "vitest run",
     "test:e2e": "xvfb-run -a playwright test",
+    "test:claims": "xvfb-run -a playwright test --grep @claim:",
+    "verify:claims": "node scripts/verify-claims.mjs",
     "verify:billing": "node scripts/verify-live-checkout.mjs",
+    "verify:url": "./verify-url.sh",
     "lint": "eslint .",
     "check": "tsc --noEmit",
     "postinstall": "wxt prepare"

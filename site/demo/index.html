@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Try Caption Confidence with four sample captions and change the highlighted word pairs." />
+    <meta name="theme-color" content="#d6e35a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Demo — Caption Confidence" />
+    <meta property="og:description" content="Try Caption Confidence with four sample captions and change the highlighted word pairs." />
+    <meta property="og:url" content="https://caption-confidence.sociobot.in/demo/" />
+    <meta property="og:image" content="https://caption-confidence.sociobot.in/assets/caption-confidence-social.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A concrete caption instrument with two caption slots and a moss marker." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Demo — Caption Confidence" />
+    <meta name="twitter:description" content="Try Caption Confidence with four sample captions and change the highlighted word pairs." />
+    <meta name="twitter:image" content="https://caption-confidence.sociobot.in/assets/caption-confidence-social.jpg" />
+    <title>Demo — Caption Confidence</title>
+    <link rel="canonical" href="https://caption-confidence.sociobot.in/demo/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-route="demo">
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="demo-banner" role="status">
+      <strong>Demo — sample data, nothing is saved</strong>
+      <div>
+        <button id="reset-demo" type="button">Reset demo</button>
+        <a id="start-real" href="/#download">Start for real</a>
+      </div>
+    </div>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Caption Confidence home"><span class="mark" aria-hidden="true"><i></i><b></b></span><span>Caption<br />Confidence</span></a>
+      <nav aria-label="Primary navigation">
+        <a aria-current="page" href="/demo/">Demo</a>
+        <a href="/#download">Install</a>
+        <a href="/privacy/">Privacy</a>
+      </nav>
+    </header>
+
+    <main id="main" class="demo-main">
+      <header class="demo-intro">
+        <p class="overline">Interactive sample</p>
+        <h1>Try word highlights on sample captions</h1>
+        <p>Choose a caption, change the word pairs, or press R to replay the current line.</p>
+      </header>
+
+      <section class="demo-workbench" aria-labelledby="sample-title">
+        <div class="demo-stage" data-size="30">
+          <div class="stage-topline"><span>Sample training video</span><output id="playback-position">00:00.8</output></div>
+          <div class="demo-caption" id="demo-caption" aria-live="polite"></div>
+          <div class="demo-timeline" aria-hidden="true"><span></span></div>
+        </div>
+        <aside class="demo-controls" aria-labelledby="sample-title">
+          <p class="overline">Current settings</p>
+          <h2 id="sample-title">Change the sample</h2>
+          <label for="demo-pairs">Word pairs, one pair per line</label>
+          <textarea id="demo-pairs" rows="4" spellcheck="false" aria-describedby="pairs-help">sip / ship
+fine / vine
+tin / kin</textarea>
+          <p id="pairs-help" class="field-help">Use exact words separated by “/”.</p>
+          <div class="compact-control">
+            <label for="demo-size">Caption size</label>
+            <select id="demo-size">
+              <option value="24">24 px</option>
+              <option value="30" selected>30 px</option>
+              <option value="36">36 px</option>
+              <option value="42">42 px</option>
+              <option value="48">48 px</option>
+            </select>
+          </div>
+          <div class="check-control">
+            <input id="demo-timing" type="checkbox" checked />
+            <label for="demo-timing">Show tight timing labels</label>
+          </div>
+          <div class="demo-actions">
+            <button id="previous-cue" type="button">Previous caption</button>
+            <button id="next-cue" type="button">Next caption</button>
+          </div>
+          <button id="replay-cue" class="slab primary" type="button">Replay current caption</button>
+          <p class="key-tip"><kbd>R</kbd> replays when a form field is not active.</p>
+          <p id="demo-status" class="demo-status" aria-live="polite">Sample ready. Caption 1 of 4.</p>
+        </aside>
+      </section>
+
+      <section class="sample-list section-pad" aria-labelledby="caption-list-title">
+        <div>
+          <p class="overline">Loaded sample</p>
+          <h2 id="caption-list-title">Four caption lines</h2>
+          <p>These lines include exact word pairs, source uncertainty, and overlapping timing.</p>
+        </div>
+        <ol id="cue-list" class="cue-list"></ol>
+      </section>
+
+      <section class="demo-import section-pad" aria-labelledby="import-title">
+        <div>
+          <p class="overline">Optional local check</p>
+          <h2 id="import-title">Try your own caption file</h2>
+          <p>The demo reads VTT or SRT in this tab. It does not store the file.</p>
+        </div>
+        <div class="import-panel">
+          <input id="demo-file" type="file" accept=".vtt,.srt,text/vtt,application/x-subrip" />
+          <label class="slab primary" for="demo-file">Import VTT or SRT</label>
+          <p id="import-status" aria-live="polite">The four sample lines stay loaded until you choose a file.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="wordmark inverse" href="/" aria-label="Caption Confidence home">Caption Confidence</a>
+      <p>Highlight chosen caption words and replay the current line.</p>
+      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/#download">Install</a></nav>
+      <small>Version 1.0 · Built by Param Factory</small>
+    </footer>
+    <div id="offline" class="offline" role="status" hidden>You are offline. This loaded sample remains available.</div>
+    <script type="module" src="/demo.ts"></script>
+  </body>
+</html>

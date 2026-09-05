@@ -1,0 +1,128 @@
+[
+  {
+    "id": "exact-word-highlights",
+    "claim": "Highlights the exact words you choose in captions.",
+    "where": "home, demo, README",
+    "test": "npm run test:e2e -- --grep @claim:exact-word-highlights",
+    "sandbox": "Fresh demo context; change the sample pair and assert the rendered highlight changes to the new exact word."
+  },
+  {
+    "id": "replay-current-caption",
+    "claim": "Press R to replay the current caption from the chosen lead-in.",
+    "where": "home, demo, README",
+    "test": "npm run test:e2e -- --grep @claim:replay-current-caption",
+    "sandbox": "Fresh demo context; select caption two, press R, and assert the visible playback position moves to its 0.8 second lead-in."
+  },
+  {
+    "id": "caption-file-imports",
+    "claim": "Imports local VTT and SRT caption files.",
+    "where": "home, demo, README, extension popup",
+    "test": "npm run test:e2e -- --grep @claim:caption-file-imports",
+    "sandbox": "Fresh demo context; import in-memory VTT and SRT fixtures and assert parsed caption output for each."
+  },
+  {
+    "id": "source-uncertainty",
+    "claim": "Labels uncertainty written into the caption source.",
+    "where": "home, demo, README",
+    "test": "npm run test:e2e -- --grep @claim:source-uncertainty",
+    "sandbox": "Fresh demo sample; select the source-marked cue and assert its visible uncertainty label."
+  },
+  {
+    "id": "timing-flags",
+    "claim": "Labels unusually tight or overlapping caption timing.",
+    "where": "home, demo, README, extension popup",
+    "test": "npm run test:e2e -- --grep @claim:timing-flags",
+    "sandbox": "Fresh demo sample; select a compressed cue, assert the timing label, disable it, and assert removal."
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "Demo changes never alter real license or extension data.",
+    "where": "demo, privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:demo-isolation",
+    "sandbox": "Fresh demo context with a real-data sentinel; change and reset the demo, leave it, and assert the sentinel is unchanged and the demo namespace is cleared."
+  },
+  {
+    "id": "no-account",
+    "claim": "The sample and free caption tools need no account.",
+    "where": "home, README",
+    "test": "npm run test:e2e -- --grep @claim:no-account",
+    "sandbox": "Fresh demo context with no credentials; replay a caption and assert no sign-in field or external API request occurs."
+  },
+  {
+    "id": "no-tracking",
+    "claim": "The website has no advertising trackers or third-party analytics.",
+    "where": "privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:no-tracking",
+    "sandbox": "Fresh context; visit every public route while recording requests and assert every request remains same-origin."
+  },
+  {
+    "id": "offline-demo",
+    "claim": "The loaded sample remains available during an offline reload.",
+    "where": "demo offline notice, README",
+    "test": "npm run test:e2e -- --grep @claim:offline-demo",
+    "sandbox": "Dedicated fresh browser context; load and control the demo, set the context offline, reload, and assert populated output and the offline notice."
+  },
+  {
+    "id": "packaged-download",
+    "claim": "The download is a Manifest V3 Chrome extension package.",
+    "where": "home, README",
+    "test": "npm run test:e2e -- --grep @claim:packaged-download",
+    "sandbox": "Production preview; download the ZIP, verify ZIP bytes, extract its manifest, and assert Manifest V3 and product name."
+  },
+  {
+    "id": "extension-track",
+    "claim": "The extension reads a caption track exposed by an HTML5 video.",
+    "where": "home, privacy, README, extension popup",
+    "test": "npm run test:e2e -- --grep @claim:extension-track",
+    "sandbox": "Fresh unpacked extension in Chromium; expose an HTML5 TextTrack and assert the live overlay uses its cue."
+  },
+  {
+    "id": "local-settings",
+    "claim": "Word-pair and display settings use browser-local extension storage.",
+    "where": "privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:local-settings",
+    "sandbox": "Fresh unpacked extension; change a word pair and read the resulting extension-local storage value."
+  },
+  {
+    "id": "no-history-permission",
+    "claim": "The extension requests no browsing-history, microphone, camera, audio-capture, or video-capture permission.",
+    "where": "privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:no-history-permission",
+    "sandbox": "Fresh production artifact; inspect the manifest loaded by Chromium and assert each excluded permission is absent."
+  },
+  {
+    "id": "no-caption-generation",
+    "claim": "The extension does not generate captions when a page has no exposed track.",
+    "where": "home, terms, README",
+    "test": "npm run test:e2e -- --grep @claim:no-caption-generation",
+    "sandbox": "Fresh unpacked extension on an HTML5 video with no track; assert it asks for a VTT or SRT file and does not create output."
+  },
+  {
+    "id": "caption-data-local",
+    "claim": "Caption text is not sent off the device.",
+    "where": "home, privacy, README, extension popup",
+    "test": "npm run test:e2e -- --grep @claim:caption-data-local",
+    "sandbox": "Fresh unpacked extension; load and render a caption while recording requests, then assert there is no non-local HTTP request."
+  },
+  {
+    "id": "free-core",
+    "claim": "Import, word highlights, timing labels, replay, and settings work without a license.",
+    "where": "home, terms, README, extension popup",
+    "test": "npm run test:e2e -- --grep @claim:free-core",
+    "sandbox": "Fresh demo context with no license; assert each core control is enabled and available."
+  },
+  {
+    "id": "supporter-checkout",
+    "claim": "The $12 one-time supporter purchase adds optional caption appearances through Sociobot checkout.",
+    "where": "home, terms, README, extension popup",
+    "test": "npm run test:e2e -- --grep @claim:supporter-checkout",
+    "sandbox": "Request the registered product checkout, follow its Dodo redirect, and assert the product, $12 price, and one-time description."
+  },
+  {
+    "id": "license-request-cache",
+    "claim": "License verification sends only the token to Sociobot and reuses its verdict for one day.",
+    "where": "privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:license-request-cache",
+    "sandbox": "Fresh site context with an intercepted verification response; assert the request shape and no second request after reload."
+  }
+]

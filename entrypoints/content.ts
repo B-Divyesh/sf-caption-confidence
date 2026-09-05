@@ -148,14 +148,14 @@ export default defineContentScript({
           cues = markTimingStrain(message.cues);
           sourceName = message.name;
           connectVideo();
-          update();
+          update(true);
           return { ok: true, cueCount: cues.length, sourceName };
         }
         if (message.type === 'CC_USE_TRACK') {
           const result = readPageTrack();
           cues = result.cues;
           sourceName = result.label;
-          update();
+          update(true);
           return { ok: true, cueCount: cues.length, sourceName };
         }
         if (message.type === 'CC_SETTINGS') {
